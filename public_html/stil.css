@@ -1,0 +1,23 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jan 19, 2017, 3:22:54 AM
+    Author     : Apsoros
+*/
+
+body{
+  background:#47657e;
+}
+
+platno{
+  position:relative;
+  top:0;
+  left:0;
+  margin: 0 auto;
+  background:#337bc7;
+  
+  -webkit-box-shadow: 0 0 20px rgba(0,0,0,0.7);
+}

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        
+        <title>Razbijač balona</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="Aleksandar Kapitan">
+        <meta name="keywords" content="FOI, Mreze 2">
+        <link href="stil.css" rel="stylesheet" type="text/css">
+        
+        
+    </head>
+    <body onload="Pokreni()">
+        <div>         
+            <canvas id="platno" width="400" height="600"></canvas>
+            <script>
+                     
+                    var platno = document.querySelector('canvas');
+                    var ctx = platno.getContext('2d');
+
+                    var sirina = platno.width;
+                    var visina = platno.height;
+                    
+                    var balonX = 50;
+                    var balonY = 60;
+
+                    
+                    var brojBalona = 25;
+                    var brojacZeleni = 0;
+                    var baloni = [];
+                    var baloniPNG = ['crveni.png', 'zeleni.png'];
+
+                    for (var i = 0; i < brojBalona; ++i) {
+                        
+                        var x = Math.floor(Math.random() * (sirina - balonX));
+                        
+                        var y = Math.floor(Math.random() * (visina - balonY));
+                        
+                        var dx = Math.floor(Math.random() * 2) === 1 ? 1 : -1;
+                        var dy = Math.floor(Math.random() * 2) === 1 ? 1 : -1;
+
+                        
+                        var imgSrc = Math.floor(Math.random() * 2);
+                        var src = baloniPNG[imgSrc];
+                        if(src ==="zeleni.png"){
+                            brojacZeleni +=1;
+                        }
+                        
+                        baloni.push({
+                            src: src,x: x,y: y,dx: dx, dy: dy
+                            });
+                    }
+
+                    function Pokreni() {
+                        
+                        if (brojacZeleni > 0) {
+                            window.requestAnimationFrame(Pokreni);
+
+                            
+                           ctx.clearRect(0, 0, sirina, visina);
+
+                            ctx.fillStyle = '#fff';
+                            ctx.fillRect (0, 0, sirina, visina);
+
+                            
+                            for (var balon in baloni) {
+                                
+                                var x = baloni[balon].x;
+                                var y = baloni[balon].y;
+                                var dx = baloni[balon].dx;
+                                var dy = baloni[balon].dy;
+                                var src = baloni[balon].src;
+                                if (x < 0 || x > (sirina - balonX)) dx = -dx;
+                                if (y < 0 || y > (visina - balonY)) dy = -dy;
+                                x += dx;
+                                y += dy;
+
+                                var img = new Image();
+                                img.src = baloni[balon].src;
+
+                                ctx.drawImage(img, x, y, balonX, balonY);
+
+                                baloni[balon].x = x;
+                                baloni[balon].y = y;
+                                baloni[balon].dx = dx;
+                                baloni[balon].dy = dy;
+                            }
+
+                            
+                            ctx.canvas.addEventListener('mouseup', function(event) {
+                                var mX = event.clientX - ctx.canvas.offsetLeft;
+                                var mY = event.clientY - ctx.canvas.offsetTop;
+                                for (var i = 0; i < baloni.length; i++) {
+                                    if (mX >= baloni[i].x && mX < baloni[i].x + balonX && mY >= baloni[i].y && mY < baloni[i].y + balonY) {
+                                        if(baloni[i].src === "zeleni.png"){
+                                            brojacZeleni -=1;
+                                            //window.alert(brojacZeleni);
+                                        }
+                                        else {
+                                            window.alert("game over");
+                                            break;
+                                            
+                                        }
+                                        baloni.splice(i, 1);
+                                        
+                                    }
+                                }
+                            });
+                        } else {
+                            window.alert("Čestitam!!");
+                            return;
+                        }
+                    }
+                
+            </script>
+        </div>
+    </body>
+</html>
